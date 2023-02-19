@@ -1,17 +1,14 @@
-FROM node:10.15-alpine
+FROM node:18-alpine as build-stage
 
-WORKDIR /ogdllc-server
+RUN npm install -g npm@latest
+RUN npm update -g
+RUN npm install -g nodemon
 
-COPY . /ogdllc-server/
+COPY . /src/services/gateway
+WORKDIR /src/services/gateway
+RUN yarn install
+RUN yarn run build
 
-RUN apk add --no-cache --virtual native-deps \
-  g++ gcc libgcc libstdc++ linux-headers make python && \
-  npm install --quiet node-pre-gyp -g &&\
-  npm install --quiet --unsafe-perm && \
-  apk del native-deps
+EXPOSE 8080
 
-## THE LIFE SAVER
-ADD https://github.com/ufoscout/docker-compose-wait/releases/download/2.2.1/wait /wait
-RUN chmod +x /wait
-
-EXPOSE 3000
+ENTRYPOINT ["nodemon", "/src/services/gateway/build/main/app.js"]
