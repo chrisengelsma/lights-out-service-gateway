@@ -8,13 +8,13 @@ async function startServer() {
 
   await require('./loaders').default({ expressApp: app });
 
-  app.listen(config.port, '0.0.0.0', err => {
-    if (err) {
-      Logger.error(err);
-      process.exit(1);
-    }
-    Logger.info(`gateway-server listening on port ${config.port}`);
-  });
+  try {
+    app.listen(config.port, '0.0.0.0', () => {
+      Logger.info(`gateway-server listening on port ${ config.port }`);
+    });
+  } catch (e) {
+    Logger.error(e);
+  }
 }
 
 startServer();
