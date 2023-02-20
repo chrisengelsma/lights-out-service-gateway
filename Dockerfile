@@ -6,8 +6,9 @@ RUN npm install -g nodemon
 
 COPY . /src/services/gateway
 WORKDIR /src/services/gateway
-RUN yarn install
-RUN yarn run build
+
+RUN npm install --force
+RUN npm run build
 
 EXPOSE 8080
 
