@@ -8,7 +8,16 @@ import methodOverride from 'method-override';
 export default ({ app }: { app: express.Application }) => {
   app.enable('trust proxy');
 
-  app.use(cors());
+  const corsOptions: any = {
+    origin: [
+      'http://localhost:3000',
+      'http://127.0.0.1:3000',
+      'https://lights-out.app',
+    ],
+    credentials: true,
+  };
+
+  app.use(cors(corsOptions));
 
   app.use(methodOverride());
   app.use(bodyParser.json());
